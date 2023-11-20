@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Run Python</title>
+  </head>
+  <body>
+    <h1>run Python Code in HTML</h1>
+    <p>
+        <!-- Se corre python dentro de HTML -->
+        {% for x in range(10) %}
+          {%  if x % 2 == 1 %}
+                <p>El valor de x = {{x}}</p> 
+            {% endif %}
+        {% endfor %}
+    </p>
+    <hr>
+    <p>
+        <!-- Regresa a Home  -->
+        <a href="http://127.0.0.1:5000">Return to Home</a>
+    </p>
+  </body>
+</html>

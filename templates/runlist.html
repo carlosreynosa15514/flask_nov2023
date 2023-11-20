@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Run Python</title>
+  </head>
+  <body>
+    <h1>Recibe lista de Python y la muestra</h1>
+    <p>
+        <!-- Se corre python dentro de HTML -->
+        <!-- No se pone content en llaves porque esta dentro de una sentencia python -->
+        {% for x in content %} 
+                <p>El valor es {{x}} </p>
+        {% endfor %}
+    </p>
+    <hr>
+    <p>
+        <a href="http://127.0.0.1:5000">Return to Home</a>
+    </p>
+  </body>
+</html>
