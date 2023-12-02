@@ -20,11 +20,14 @@ from flask import request
 from flask import session
 # Para usar una funcion para manipula el tiempo de duracion de la session
 from datetime import timedelta
+# Para usar message flashing
+from flask import flash
 
 # Se crea la instancia de la aplicacion
 app = Flask(__name__)
 # Secret Key necesaria para usar sessions
 app.secret_key = "cmoreno "
+# Se utiliza para poder configurar el tiempo que va a durar la session
 app.permanent_session_lifetime = timedelta(minutes=1) # Puede ser: days=5 etc.
 
 # *********************************** Seccion de Funciones - Rutas de la Web *************************
@@ -35,7 +38,7 @@ app.permanent_session_lifetime = timedelta(minutes=1) # Puede ser: days=5 etc.
 def home():
     return render_template("sessions.html")
 
-# Ruta para probar desplegar el login FORM
+# Ruta para probar desplegar el login FORM y recibir el Login
 @app.route("/login", methods=["POST","GET"])
 def login():
     if request.method == "POST":
@@ -43,9 +46,14 @@ def login():
         usuario = request.form["nm"]
         # Se crea la session
         session["user"] = usuario
-        return redirect(url_for("user"))
+        return redirect(url_for("user2"))
     else:
+        if "user" in session:
+            user = session["user"]
+            flash(f"{user} you are allready logged in! ")
+            return redirect(url_for("user2"))
         # Cuando no hay session abierte se envia al usuario a la paginal del login
+        flash("You need to loging")
         return render_template("login.html")
 
 # Ruta para enviar el nombre del usuario cuando hace login
@@ -65,10 +73,28 @@ def user():
         return html
     else:
         return redirect(url_for("login"))
+    
+# Ruta para utilizar un html de ususario
+@app.route("/user2")
+def user2():
+# Se revisa si hay session activa con la llave de la session["llave"]
+    if "user" in session:
+        user = session["user"]
+        flash(f" {user} Welcome to you user page! ", "info")
+        return render_template("user2.html", user=user)
+    else:
+        return redirect(url_for("login"))    
 
 # Logout cerrando sessions data
 @app.route("/logout")
 def logout():
+    # Aqui usamos flash para colocar el mensaje en la pagina a la que redirigimos al usuario
+    # El segundo parametro es la categoria, (info, warning, error)
+    # Se debe colocar en la pagina donde se van a ver los mensajes un ciclo para poder mostrarlos dentro de un block_content
+    # Con el if se revisa si se tenia una session activa
+    if "user" in session:
+        user = session["user"]
+        flash(f"{user} -> You heve been logged out!", "info")
     session.pop("user", None)
     return redirect(url_for("home"))
 
